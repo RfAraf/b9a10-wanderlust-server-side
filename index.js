@@ -46,6 +46,7 @@ async function run() {
       res.send(touristSpot);
     });
 
+    // read all tourist spot of a certain user who added those
     app.get("/myList/:email", async (req, res) => {
       const userEmail = req.params.email;
       const query = { email: userEmail };
@@ -59,6 +60,15 @@ async function run() {
       const touristSpot = req.body;
       console.log("new spot", touristSpot);
       const result = await touristSpotCollection.insertOne(touristSpot);
+      res.send(result);
+    });
+
+    // delete a tourist spot
+    app.delete("/myList/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log("delete this id from db", id);
+      const query = { _id: new ObjectId(id) };
+      const result = await touristSpotCollection.deleteOne(query);
       res.send(result);
     });
 
