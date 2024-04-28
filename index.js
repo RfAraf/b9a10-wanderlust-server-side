@@ -29,12 +29,20 @@ async function run() {
     // await client.connect();
 
     const database = client.db("touristSpotDB");
-    const userCollection = database.collection("touristSpots");
+    const touristSpotCollection = database.collection("touristSpots");
+
+    // read created tourist spot in database as API
+    app.get("/touristSpots", async (req, res) => {
+      const cursor = touristSpotCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // create a tourist spot
     app.post("/touristSpots", async (req, res) => {
       const touristSpot = req.body;
       console.log("new spot", touristSpot);
-      const result = await userCollection.insertOne(touristSpot);
+      const result = await touristSpotCollection.insertOne(touristSpot);
       res.send(result);
     });
 
