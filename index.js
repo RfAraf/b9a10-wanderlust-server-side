@@ -28,6 +28,16 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
+    const database = client.db("touristSpotDB");
+    const userCollection = database.collection("touristSpots");
+    // create a tourist spot
+    app.post("/touristSpots", async (req, res) => {
+      const touristSpot = req.body;
+      console.log("new spot", touristSpot);
+      const result = await userCollection.insertOne(touristSpot);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log(
@@ -46,5 +56,5 @@ app.get("/", (req, res) => {
 
 // connect app to the port
 app.listen(port, () => {
-  console.log(`coffee store running on PORT : ${port}`);
+  console.log(`tourism running on PORT : ${port}`);
 });
