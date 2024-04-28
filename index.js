@@ -46,6 +46,14 @@ async function run() {
       res.send(touristSpot);
     });
 
+    app.get("/myList/:email", async (req, res) => {
+      const userEmail = req.params.email;
+      const query = { email: userEmail };
+      const cursor = touristSpotCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // create a tourist spot
     app.post("/touristSpots", async (req, res) => {
       const touristSpot = req.body;
