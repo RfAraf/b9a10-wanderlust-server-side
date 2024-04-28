@@ -63,10 +63,49 @@ async function run() {
       res.send(result);
     });
 
+    // update a spot
+    app.put("/touristSpots/:id", async (req, res) => {
+      const id = req.params.id;
+      const spot = req.body;
+      const {
+        image,
+        tourists_spot_name,
+        country_name,
+        location,
+        short_description,
+        average_cost,
+        total_visitors_per_year,
+        travel_time,
+        seasonality,
+      } = spot;
+
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedSpot = {
+        $set: {
+          image: image,
+          tourists_spot_name: tourists_spot_name,
+          country_name: country_name,
+          location: location,
+          short_description: short_description,
+          average_cost: average_cost,
+          total_visitors_per_year: total_visitors_per_year,
+          travel_time: travel_time,
+          seasonality: seasonality,
+        },
+      };
+
+      const result = await touristSpotCollection.updateOne(
+        filter,
+        updatedSpot,
+        options
+      );
+      res.send(result);
+    });
+
     // delete a tourist spot
     app.delete("/myList/:id", async (req, res) => {
       const id = req.params.id;
-      console.log("delete this id from db", id);
       const query = { _id: new ObjectId(id) };
       const result = await touristSpotCollection.deleteOne(query);
       res.send(result);
