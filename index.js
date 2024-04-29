@@ -30,10 +30,18 @@ async function run() {
 
     const database = client.db("touristSpotDB");
     const touristSpotCollection = database.collection("touristSpots");
+    const countriesCollection = database.collection("countries");
 
     // read created tourist spot in database as API
     app.get("/touristSpots", async (req, res) => {
       const cursor = touristSpotCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // read countries in database
+    app.get("/countries", async (req, res) => {
+      const cursor = countriesCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
