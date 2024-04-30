@@ -9,9 +9,6 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// tourismGuy
-// TBOTFk9WsE5V28u8
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.0xqywot.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -58,6 +55,15 @@ async function run() {
     app.get("/myList/:email", async (req, res) => {
       const userEmail = req.params.email;
       const query = { email: userEmail };
+      const cursor = touristSpotCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // read all tourist spot of a certain country
+    app.get("/countries/:country_name", async (req, res) => {
+      const country_name = req.params.country_name;
+      const query = { country_name: country_name };
       const cursor = touristSpotCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
